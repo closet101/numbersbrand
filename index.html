@@ -37,6 +37,15 @@ footer{text-align:center;padding:1.5rem;font-size:.65rem;color:#333;letter-spaci
   .price{font-size:.88rem;margin-bottom:.6rem}
   .btn{font-size:.7rem;padding:.55rem}
 }
+/* Lightbox */
+.img-wrap img{cursor:zoom-in}
+#lightbox{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.92);align-items:center;justify-content:center;padding:1rem}
+#lightbox.open{display:flex}
+#lightbox img{max-width:90vw;max-height:88vh;object-fit:contain;border-radius:6px;box-shadow:0 0 40px rgba(0,0,0,.8);animation:lbIn .2s ease}
+@keyframes lbIn{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:scale(1)}}
+#lb-close{position:fixed;top:1rem;right:1.2rem;font-size:2rem;color:#fff;background:none;border:none;cursor:pointer;line-height:1;opacity:.8}
+#lb-close:hover{opacity:1}
+#lb-caption{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);color:#c9a84c;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.1em;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -329,5 +338,29 @@ footer{text-align:center;padding:1.5rem;font-size:.65rem;color:#333;letter-spaci
 </div>
 </div>
 <footer>© 2026 101 Clothing &nbsp;·&nbsp; WhatsApp: +255 619 726 900</footer>
+
+<div id="lightbox" role="dialog" aria-modal="true">
+  <button id="lb-close" aria-label="Close">&times;</button>
+  <img id="lb-img" src="" alt="">
+  <div id="lb-caption"></div>
+</div>
+
+<script>
+(function(){
+  var lb=document.getElementById('lightbox'),lbImg=document.getElementById('lb-img'),lbCap=document.getElementById('lb-caption'),lbClose=document.getElementById('lb-close');
+  document.querySelectorAll('.img-wrap img').forEach(function(img){
+    img.addEventListener('click',function(){
+      var name=this.closest('.card').querySelector('.name');
+      lbImg.src=this.src; lbImg.alt=this.alt;
+      lbCap.textContent=name?name.textContent:'';
+      lb.classList.add('open'); document.body.style.overflow='hidden';
+    });
+  });
+  function close(){lb.classList.remove('open');document.body.style.overflow='';}
+  lbClose.addEventListener('click',close);
+  lb.addEventListener('click',function(e){if(e.target===lb)close();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+})();
+</script>
 </body>
 </html>
